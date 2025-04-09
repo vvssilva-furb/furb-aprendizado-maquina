@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import demo as reg_simples
 import matplotlib.pyplot as plt
+from sklearn.metrics import r2_score
 
 def regressaop():
     """
@@ -217,6 +218,60 @@ def regressaop():
     eqm_n8_teste = eqm(reg_n8_treino, x_teste, y_teste)
     print("EQM N=8 (teste):", eqm_n8_teste)
 
+    """
+    k) Veja o que calcula o Coeficiente de Determinação ou R quadrado
+    e/ou aqui. Calcule o R2 para os dados de treino e teste (veja a função r2_score da biblioteca sklearn.metrics). 
+    O que se pode concluir com os resultados? 
+    
+    RESPOSTA: 
+    
+    Os resultados mostram que nenhum dos modelos conseguiu representar bem os dados. Todos os valores de R² foram negativos, o que indica que as previsões foram piores do que simplesmente usar a média. 
+    Conforme o grau do polinômio aumentou, o desempenho piorou ainda mais, mostrando que houve overfitting. 
+    Ou seja, os modelos não aprenderam de verdade — só decoraram os dados de treino e erraram feio nos testes.
+    """
+
+    print("\n--- Cálculo do R² (Coeficiente de Determinação) ---")
+
+    # R² para dados de TREINO
+    print("\nR² - Dados de TREINO:")
+    y_n1_treino_est = estima_y(reg_n1_treino, x_treino)
+    y_n2_treino_est = estima_y(reg_n2_treino, x_treino)
+    y_n3_treino_est = estima_y(reg_n3_treino, x_treino)
+    y_n8_treino_est = estima_y(reg_n8_treino, x_treino)
+
+    print("R² N=1 (treino):", r2_score(y_treino, y_n1_treino_est))
+    print("R² N=2 (treino):", r2_score(y_treino, y_n2_treino_est))
+    print("R² N=3 (treino):", r2_score(y_treino, y_n3_treino_est))
+    print("R² N=8 (treino):", r2_score(y_treino, y_n8_treino_est))
+
+    # R² para dados de TESTE
+    print("\nR² - Dados de TESTE:")
+    y_n1_teste_est = estima_y(reg_n1_treino, x_teste)
+    y_n2_teste_est = estima_y(reg_n2_treino, x_teste)
+    y_n3_teste_est = estima_y(reg_n3_treino, x_teste)
+    y_n8_teste_est = estima_y(reg_n8_treino, x_teste)
+
+    print("R² N=1 (teste):", r2_score(y_teste, y_n1_teste_est))
+    print("R² N=2 (teste):", r2_score(y_teste, y_n2_teste_est))
+    print("R² N=3 (teste):", r2_score(y_teste, y_n3_teste_est))
+    print("R² N=8 (teste):", r2_score(y_teste, y_n8_teste_est))
+
+    """
+    l) Visto o cálculo do erro e do coeficiente de determinação, qual o modelo mais preciso neste caso? Explique sua resposta.
+    
+    RESPOSTA:
+    
+    O modelo mais preciso foi o de grau 1 (N=1). 
+    Apesar de ainda ter desempenho ruim (R² negativo e EQM alto), ele foi o que teve os menores erros (EQM) 
+    e os “menos piores” valores de R² tanto no treino quanto no teste. 
+    Os modelos de grau mais alto pioraram muito o desempenho, com erros absurdos e overfitting claro. 
+    Ou seja, aumentar o grau do polinômio só fez o modelo piorar.
+    """
+
+
+# Função para estimar y com base nos coeficientes
+def estima_y(regressao, x):
+    return [sum(regressao[j] * (x[i] ** j) for j in range(len(regressao))) for i in range(len(x))]
 
 def eqm(regressao_n, vetor_x, vetor_y):
     # 1. Calcular os valores estimados (ŷ) para qualquer N
