@@ -195,6 +195,28 @@ def regressaop():
     print("EQM N=8 (treino):", eqm_n8_treino)
     gera_graficos(x_treino, y_treino, correlacao_treino, reg_n8_treino, "yellow")
 
+    """
+    j) Repita o passo g, mas agora utilize somente os dados de Teste para calcular o erro.
+    """
+
+    print("\n--- Cálculo do EQM utilizando apenas os dados de TESTE ---")
+
+    # Regressão N = 1
+    eqm_n1_teste = eqm(reg_n1_treino, x_teste, y_teste)
+    print("EQM N=1 (teste):", eqm_n1_teste)
+
+    # Regressão N = 2
+    eqm_n2_teste = eqm(reg_n2_treino, x_teste, y_teste)
+    print("EQM N=2 (teste):", eqm_n2_teste)
+
+    # Regressão N = 3
+    eqm_n3_teste = eqm(reg_n3_treino, x_teste, y_teste)
+    print("EQM N=3 (teste):", eqm_n3_teste)
+
+    # Regressão N = 8
+    eqm_n8_teste = eqm(reg_n8_treino, x_teste, y_teste)
+    print("EQM N=8 (teste):", eqm_n8_teste)
+
 
 def eqm(regressao_n, vetor_x, vetor_y):
     # 1. Calcular os valores estimados (ŷ) para qualquer N
