@@ -66,7 +66,7 @@ def regressaop():
     """
     # Construir a matriz do sistema (polinômio de grau 8)
     X_N8 = np.vstack([np.ones_like(vetor_x), vetor_x, vetor_x ** 2, vetor_x ** 3,
-                   vetor_x ** 4, vetor_x ** 5, vetor_x ** 6, vetor_x ** 7, vetor_x ** 8]).T  # Cada linha: [1, x, x^2]
+                      vetor_x ** 4, vetor_x ** 5, vetor_x ** 6, vetor_x ** 7, vetor_x ** 8]).T  # Cada linha: [1, x, x^2]
     Y_N8 = vetor_y  # Vetor de respostas
 
     # Resolver a equação normal B = (A^T A)^(-1) A^T Y
@@ -108,7 +108,7 @@ def regressaop():
     """
     h) Para evitar o overfitting, divida os dados aleatoriamente em Dados de Treinamento e Dados de Teste. 
     Use 10% dos dados como conjunto de teste, e o resto como de treinamento.
-    
+
     OBS: adicionamos comentários com o passo-a-passo, seguindo os slides do conteúdo (Método do Test Set)
     """
 
@@ -149,27 +149,52 @@ def regressaop():
     print("Coeficientes da regressão N=1 (treinamento):", coef_n1_treino)
     print("EQM no conjunto de teste (10% dos dados):", eqm_teste)
 
+    # Gera gráfico com dados de treinamento
+    correlacao_treino = reg_simples.correlacao(x_treino, y_treino)
+    gera_graficos(x_treino, y_treino, correlacao_treino, coef_n1_treino, "blue")
+
     """
     i) Repita os passos de c - f, mas agora use apenas os dados de treinamento para ajustar a linha de regressão.
     """
-    print("\n--- Validação com dados de TREINAMENTO e teste separados ---")
 
-    for grau in [1, 2, 3, 8]:
-        # Construir a matriz de treinamento para o grau atual
-        X_treino = np.vstack([x_treino ** i for i in range(grau + 1)]).T
-        coef = np.linalg.inv(X_treino.T @ X_treino) @ X_treino.T @ y_treino
-        coef = coef[::-1]  # inverter para manter ordem como no restante do código
+    print("\n--- Regressões usando SOMENTE dados de TREINAMENTO ---")
 
-        # Construir matriz de teste para o grau atual
-        X_teste = np.vstack([x_teste ** i for i in range(grau + 1)]).T
-        y_teste_estimado = X_teste @ coef
+    # Regressão N = 1 (grau 1)
+    X_treino_n1 = np.vstack([np.ones_like(x_treino), x_treino]).T
+    reg_n1_treino = np.linalg.inv(X_treino_n1.T @ X_treino_n1) @ X_treino_n1.T @ y_treino
+    reg_n1_treino = reg_n1_treino[::-1]
+    eqm_n1_treino = eqm(reg_n1_treino, x_treino, y_treino)
+    print("Regressão N=1 (treino):", reg_n1_treino)
+    print("EQM N=1 (treino):", eqm_n1_treino)
+    gera_graficos(x_treino, y_treino, correlacao_treino, reg_n1_treino, "r")
 
-        # Calcular EQM no conjunto de teste
-        eqm_val = np.mean((y_teste - y_teste_estimado) ** 2)
+    # Regressão N = 2 (grau 2)
+    X_treino_n2 = np.vstack([np.ones_like(x_treino), x_treino, x_treino ** 2]).T
+    reg_n2_treino = np.linalg.inv(X_treino_n2.T @ X_treino_n2) @ X_treino_n2.T @ y_treino
+    reg_n2_treino = reg_n2_treino[::-1]
+    eqm_n2_treino = eqm(reg_n2_treino, x_treino, y_treino)
+    print("Regressão N=2 (treino):", reg_n2_treino)
+    print("EQM N=2 (treino):", eqm_n2_treino)
+    gera_graficos(x_treino, y_treino, correlacao_treino, reg_n2_treino, "g")
 
-        # Mostrar resultados
-        print(f"Grau {grau}: Coeficientes = {coef}")
-        print(f"Grau {grau}: EQM no conjunto de teste = {eqm_val}\n")
+    # Regressão N = 3 (grau 3)
+    X_treino_n3 = np.vstack([np.ones_like(x_treino), x_treino, x_treino ** 2, x_treino ** 3]).T
+    reg_n3_treino = np.linalg.inv(X_treino_n3.T @ X_treino_n3) @ X_treino_n3.T @ y_treino
+    reg_n3_treino = reg_n3_treino[::-1]
+    eqm_n3_treino = eqm(reg_n3_treino, x_treino, y_treino)
+    print("Regressão N=3 (treino):", reg_n3_treino)
+    print("EQM N=3 (treino):", eqm_n3_treino)
+    gera_graficos(x_treino, y_treino, correlacao_treino, reg_n3_treino, "black")
+
+    # Regressão N = 8 (grau 8)
+    X_treino_n8 = np.vstack([x_treino ** i for i in range(9)]).T
+    reg_n8_treino = np.linalg.inv(X_treino_n8.T @ X_treino_n8) @ X_treino_n8.T @ y_treino
+    reg_n8_treino = reg_n8_treino[::-1]
+    eqm_n8_treino = eqm(reg_n8_treino, x_treino, y_treino)
+    print("Regressão N=8 (treino):", reg_n8_treino)
+    print("EQM N=8 (treino):", eqm_n8_treino)
+    gera_graficos(x_treino, y_treino, correlacao_treino, reg_n8_treino, "yellow")
+
 
 def eqm(regressao_n, vetor_x, vetor_y):
     # 1. Calcular os valores estimados (ŷ) para qualquer N
