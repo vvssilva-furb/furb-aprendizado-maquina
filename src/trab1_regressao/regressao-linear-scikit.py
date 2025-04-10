@@ -4,6 +4,14 @@ from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_absolute_error, mean_squared_error
 
+"""
+ALUNOS:
+
+Augusto Arraga
+Eduardo Reinert
+Vinicius Vanelli
+"""
+
 # Dados extraídos da imagem
 dados = np.array([
     [2104, 3, 399900], [1600, 3, 329900], [2400, 3, 369000], [1416, 2, 232000],

@@ -4,6 +4,14 @@ import demo as reg_simples
 import matplotlib.pyplot as plt
 from sklearn.metrics import r2_score
 
+"""
+ALUNOS:
+
+Augusto Arraga
+Eduardo Reinert
+Vinicius Vanelli
+"""
+
 def regressaop():
     """
     a) Baixe o arquivo data_preg.mat ou data_preg.csv. A primeira coluna representa os valores de x e a segunda coluna representa os valores de y.
