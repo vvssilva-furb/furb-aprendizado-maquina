@@ -1,7 +1,5 @@
-import scipy.io as scipy
 import matplotlib.pyplot as plt
 import math
-import numpy as np
 from scipy import stats
 
 """
@@ -21,7 +19,7 @@ def meuKnn(dadosTrain, rotuloTrain, dadosTeste, k):
     for dado in dadosTeste:
         distancias = []
         for i in range(len(dadosTrain)):
-            distancias.append(distancia_euclidiana(dado, dadosTrain[i]))
+            distancias.append(dist(dado, dadosTrain[i]))
 
         distancias = list(enumerate(distancias))
         distancias = sorted(distancias, key=lambda x: x[1])
@@ -34,7 +32,7 @@ def meuKnn(dadosTrain, rotuloTrain, dadosTeste, k):
 
     return rotulos_teste
 
-def distancia_euclidiana(dadoTeste, dadoTrain):
+def dist(dadoTeste, dadoTrain):
     soma = 0
     for i in range(len(dadoTeste)):
         soma += (dadoTeste[i] - dadoTrain[i]) ** 2
@@ -66,17 +64,3 @@ def funcao_acuracia(rotulo_previsto, rotulo_esperado):
     total_num = len(rotulo_esperado)
 
     return total_corretos / total_num
-
-def main():
-    mat = scipy.loadmat('grupoDados1.mat')
-
-    grupoTest = mat['grupoTest']
-    grupoTrain = mat['grupoTrain']
-    testRots = mat['testRots']
-    trainRots = mat['trainRots']
-
-    rotulo_previsto = meuKnn(grupoTrain, trainRots, grupoTest, 10)
-    print (funcao_acuracia(rotulo_previsto, testRots))
-
-if __name__ == "__main__":
-    main()
